@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+
+<script>
+  function* quest(questions = []) {
+    for (const question of questions) {
+      question.answer = yield (question.question);
+    }
+    return questions;
+  }
+
+  function execute(generator, yieldValue) {
+    let next = generator.next(yieldValue);
+
+    if (!next.done) {
+      const result = prompt(next.value);
+      execute(generator, result);
+    } else {
+      document.body.innerHTML = `<pre>${JSON.stringify(next.value, null, ' ')}</pre>`;
+    }
+  }
+
+  const questions = [
+    {question: 'Введите имя'},
+    {question: 'Какой у вас возраст'},
+    {question: 'На каком факультете учитесь'},
+    {question: 'Номер текущей четверти'},
+  ];
+
+  execute(quest(questions));
+</script>
+</body>
+</html>
+
